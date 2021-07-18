@@ -38,3 +38,15 @@ class Reactions:
     def getParams(self, index):
 
         return None
+
+    def __eq__(self, o: object) -> bool:
+        
+        same_fs = False
+        if self.fs == o.fs:
+            same_fs = True 
+
+        same_bs = False
+        if self.bs == o.bs:
+            same_bs = True
+
+        return (same_bs and same_fs)

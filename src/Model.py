@@ -5,7 +5,7 @@ from .reactions.Reactions import Reactions
 
 class Model: 
 
-    def __init__(self, modelName = "None"):
+    def __init__(self, modelName = "unnamed_model"):
 
         self.reactions = []
         self.modelName = modelName
@@ -48,12 +48,42 @@ class Model:
 
     def addReaction(self, reaction: Reactions):
 
-        self.reactions.append(reaction)
-        self.updateSpecies()
+        dup = False
+        for r in self.reactions:
+            if r == reaction:
+                dup = True 
+
+        if not dup:  
+            self.reactions.append(reaction)
+            self.updateSpecies()
+
+        else:
+            print('Duplicate reaction detected', reaction)
 
     def addActivation(self, activator: str, conc: float, activationTime: float):
 
         self.activators.append((activator, conc, activationTime))
+
+    def combine(self, otherModel, modelName = "None"):
+
+        # combines model while avoiding duplicate reactions
+        # model combination is really just appending reactions and activations together
+
+        newModel = Model(modelName)
+
+        otherReactions = otherModel.reactions
+        reactions = self.reactions
+
+        for r in reactions:
+            newModel.addReaction(r)
+
+        for ro in otherReactions:
+            newModel.addReaction(ro)
+
+        return newModel
+
+    def __str__(self) -> str:
+        pass
 
     def generateTxtbc(self):
         
