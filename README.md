@@ -3,6 +3,8 @@
 
  ### Model integration
 
+- Automatic conflict detection
+    - e.g. A+B = C conflicts with A+B=D
 
 
  ### Automatic parameter generation

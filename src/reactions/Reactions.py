@@ -1,4 +1,6 @@
 
+# Reaction Interface
+
 class Reactions:
 
     def __init__(self, forwardSpecies, backwardSpecies):
@@ -14,14 +16,26 @@ class Reactions:
         else: 
             self.bs = backwardSpecies
         self.type = "None"
+        self.params = {}
+        self.paramNames = {}
 
-    def computeForward(self, forwardValues: list):
+    def __renameParams(self):
+        
+        # This function will be called at initialisation or 
+        # parameter name update to calibrate parameter names 
+        # to a naming rule
+
+        return None
+
+    def computeForward(self, stateVars: dict):
         
         return None
 
-    def computeBackward(self, backwardValues: list):
+    def computeBackward(self, stateVars: dict):
 
         return None
+
+    # To generate txtbc
 
     def getEqHeaderStr(self, index):
 
@@ -35,9 +49,15 @@ class Reactions:
 
         return None
 
-    def getParams(self, index):
+    # ^--- To generate txtbc
 
-        return None
+    def getParams(self):
+
+        return self.params
+
+    def getParamSize(self):
+
+        return len(self.params)
 
     def __eq__(self, o: object) -> bool:
         

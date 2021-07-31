@@ -5,31 +5,60 @@ class MichaelisMenten(Reactions):
     def __init__(self, forwardSpecie: str, backwardSpecie: str, Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100):
 
         super().__init__(forwardSpecie, backwardSpecie)
+        
+        # to deprecate
         self.Vmax_f = Vmax_f
         self.Km_f = Km_f 
         self.Vmax_b = Vmax_b
         self.Km_b = Km_b
+
+
         self.type = "MichaelisMenten"
+        self.params = {
+            'vmaxf': Vmax_f,
+            'kmf': Km_f,
+            'vmaxb': Vmax_b,
+            'kmb': Km_b
+        }
 
-    def computeForward(self, forwardValues: list):
+        self.__renameParams()
 
-        return (self.Vmax_f * forwardValues[0]) / (self.Km_f + forwardValues[0])
+    def __renameParams(self):
+        
+        vmaxf = 'vm_{fs}_to_{bs}'.format(fs=self.fs[0], bs=self.bs[0])
+        kmf = 'km_{fs}_to_{bs}'.format(fs=self.fs[0], bs=self.bs[0])
+        vmaxb = 'vm_{bs}_to_{fs}'.format(fs=self.fs[0], bs=self.bs[0])
+        kmb = 'km_{bs}_to_{fs}'.format(fs=self.fs[0], bs=self.bs[0])
 
-    def computeBackward(self, backwardValues: list):
+        self.paramNames['vmaxf'] = vmaxf
+        self.paramNames['kmf'] = kmf
+        self.paramNames['vmaxb'] = vmaxb
+        self.paramNames['kmb'] = kmb
 
-        return (self.Vmax_b * backwardValues[0]) / (self.Km_b + backwardValues[0])
+    def computeForward(self, stateVars: dict):
+
+        fs = stateVars[self.fs[0]]
+        
+
+        return (self.params['vmaxf'] * fs) / (self.params['kmf'] + fs)
+
+    def computeBackward(self, stateVars: dict):
+
+        bs = stateVars[self.bs[0]]
+
+        return (self.params['vmaxb'] * bs) / (self.params['kmb'] + bs)
 
     def getEqHeaderStr(self, index):
         return "{forward} <=> {backward} :R{i}".format(forward=self.fs[0], backward=self.bs[0], i=index)
 
     def getForwardEqStr(self, index):
+
+        # TODO 
         
-        return "Vmax{id}f * {fs} / (Km{id}f + {fs})".format(id=str(index), fs=self.fs[0])
+        return "{vmaxf} * {fs} / ({kmf} + {fs})".format(id=str(index), fs=self.fs[0])
 
     def getBackwardEqStr(self, index):
+
+        # TODO
         
         return "Vmax{id}b * {bs} / (Km{id}b + {bs})".format(id=str(index), bs=self.bs[0])
-
-    def getParams(self, index):
-
-        return {"Vmax{id}f".format(id=index): self.Vmax_f, "Vmax{id}b".format(id=index): self.Vmax_b, "Km{id}f".format(id=index): self.Km_f, "Km{id}b".format(id=index): self.Km_b}

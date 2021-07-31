@@ -10,9 +10,10 @@ class Model:
         self.reactions = []
         self.modelName = modelName
 
-        # structure: "specieName": "initial concentration"
         self.activators = []
         self.specieFamily = {}
+        
+        # structure: "specieName": "initial concentration"
         self.species = {}
 
     def setModelName(self, name):
@@ -83,6 +84,11 @@ class Model:
         return newModel
 
     def __str__(self) -> str:
+        pass
+
+
+    def getParamSize(self) -> int:
+        
         pass
 
     def generateTxtbc(self):
