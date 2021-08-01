@@ -5,14 +5,7 @@ class MichaelisMenten(Reactions):
     def __init__(self, forwardSpecie: str, backwardSpecie: str, Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100):
 
         super().__init__(forwardSpecie, backwardSpecie)
-        
-        # to deprecate
-        self.Vmax_f = Vmax_f
-        self.Km_f = Km_f 
-        self.Vmax_b = Vmax_b
-        self.Km_b = Km_b
-
-
+    
         self.type = "MichaelisMenten"
         self.params = {
             'vmaxf': Vmax_f,
@@ -51,14 +44,10 @@ class MichaelisMenten(Reactions):
     def getEqHeaderStr(self, index):
         return "{forward} <=> {backward} :R{i}".format(forward=self.fs[0], backward=self.bs[0], i=index)
 
-    def getForwardEqStr(self, index):
-
-        # TODO 
+    def getForwardEqStr(self):
         
-        return "{vmaxf} * {fs} / ({kmf} + {fs})".format(id=str(index), fs=self.fs[0])
+        return "{vmaxf} * {fs} / ({kmf} + {fs})".format(vmaxf=self.paramNames['vmaxf'], kmf=self.paramNames['kmf'], fs=self.fs[0])
 
-    def getBackwardEqStr(self, index):
-
-        # TODO
+    def getBackwardEqStr(self):
         
-        return "Vmax{id}b * {bs} / (Km{id}b + {bs})".format(id=str(index), bs=self.bs[0])
+        return "{vmaxb} * {bs} / ({kmb} + {bs})".format(vmaxb=self.paramNames['vmaxb'], kmb=self.paramNames['kmb'], bs=self.bs[0])

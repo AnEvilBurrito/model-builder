@@ -19,6 +19,8 @@ class Reactions:
         self.params = {}
         self.paramNames = {}
 
+        self.noBackward = False
+
     def __renameParams(self):
         
         # This function will be called at initialisation or 
@@ -41,11 +43,11 @@ class Reactions:
 
         return None
 
-    def getForwardEqStr(self, index):
+    def getForwardEqStr(self):
 
         return None
 
-    def getBackwardEqStr(self, index):
+    def getBackwardEqStr(self):
 
         return None
 

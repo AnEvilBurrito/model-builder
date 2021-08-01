@@ -1,5 +1,5 @@
-# from .Reactions import Reactions
-from Reactions import Reactions
+from .Reactions import Reactions
+# from Reactions import Reactions
 
 class MassAction(Reactions):
 

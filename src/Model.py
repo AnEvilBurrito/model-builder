@@ -30,11 +30,11 @@ class Model:
             re = self.reactions[i]
             for fs in re.fs:
                 if fs not in self.species and fs != 'None' and fs != None:
-                    self.species[fs] = 100
+                    self.species[fs] = 0
             
             for bs in re.bs:
                 if bs not in self.species and bs != 'None' and bs != None:
-                    self.species[bs] = 100
+                    self.species[bs] = 0
             i += 1
 
     def specieConc(self, specieNames: list, conc: list):
@@ -89,7 +89,12 @@ class Model:
 
     def getParamSize(self) -> int:
         
-        pass
+        size = 0
+        for re in self.reactions:
+            size += re.getParamSize()
+        
+        return size
+
 
     def generateTxtbc(self):
         
@@ -134,10 +139,10 @@ class Model:
         while i < len(self.reactions):
             re = self.reactions[i]
             id_ = i + 1
-            re_params = re.getParams(id_)
+            re_params = re.paramNames
             names = re_params.keys()
             for n in names:
-                toStr = n + " = " + str(re_params[n]) + "\n"
+                toStr = re_params[n] + " = " + str(re.params[n]) + "\n"
                 txtbc.write(toStr)
             
             txtbc.write("\n")
@@ -191,11 +196,11 @@ class Model:
 
             txtbc.write(re.getEqHeaderStr(id_))
             txtbc.write("\n")
-            if re.getForwardEqStr(id_) is not None:
-                txtbc.write("\tvf = " + re.getForwardEqStr(id_))
+            if re.getForwardEqStr() is not None:
+                txtbc.write("\tvf = " + re.getForwardEqStr())
                 txtbc.write("\n")
-            if re.getBackwardEqStr(id_) is not None:
-                txtbc.write("\tvr = " + re.getBackwardEqStr(id_))
+            if re.getBackwardEqStr() is not None:
+                txtbc.write("\tvr = " + re.getBackwardEqStr())
                 txtbc.write("\n")
             
             txtbc.write("\n")
@@ -221,6 +226,7 @@ class Model:
         ### END
 
         txtbc.close()
+
 
 if __name__ == "__main__":
     pass

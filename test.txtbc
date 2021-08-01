@@ -1,0 +1,68 @@
+********** MODEL NAME
+test
+
+********** MODEL NOTES
+
+********** MODEL STATE INFORMATION
+% Initial Conditions
+
+Sos(0) = 0
+Grb2(0) = 0
+SosuGrb2(0) = 0
+Erk(0) = 0
+pErk(0) = 0
+A(0) = 0
+B(0) = 0
+
+********** MODEL PARAMETERS
+ka_Sos_Grb2 = 0.001
+kd_SosuGrb2 = 0.01
+
+vm_Erk_to_pErk = 10
+km_Erk_to_pErk = 100
+vm_pErk_to_Erk = 10
+km_pErk_to_Erk = 100
+
+km_A_to_B = 100
+vm_B_to_A = 10
+km_B_to_A = 100
+kc_A_to_B_C = 0.1
+kc_A_to_B_D = 0.1
+ki_B_to_A_I = 0.01
+ki_B_to_A_I2 = 0.01
+
+% Constants
+
+% Stimulation Concentration
+
+% Drug Concentration
+
+% Time Variables
+
+********** MODEL VARIABLES
+
+
+********** MODEL REACTIONS
+Sos + Grb2 <=> SosuGrb2 :R1
+	vf = ka_Sos_Grb2 * Sos * Grb2
+	vr = kd_SosuGrb2 * SosuGrb2
+
+Erk <=> pErk :R2
+	vf = vm_Erk_to_pErk * Erk / (km_Erk_to_pErk + Erk)
+	vr = vm_pErk_to_Erk * pErk / (km_pErk_to_Erk + pErk)
+
+A <=> B :R3
+	vf = (kc_A_to_B_C * C + kc_A_to_B_D * D) * A / (km_A_to_B + A)
+	vr = (vm_B_to_A) * B / (km_B_to_A + B) * (1 + I / ki_B_to_A_I) * (1 + I / ki_B_to_A_I)
+
+********** MODEL FUNCTIONS
+
+
+********** MODEL EVENTS
+
+
+
+********** MODEL MATLAB FUNCTIONS
+
+
+
