@@ -7,10 +7,10 @@ class MichaelisMentenGeneral(MichaelisMenten):
     def __init__(self, forwardSpecie: str, backwardSpecie: str, Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100, noBackward=False):
 
         # Generalised forward Michaelis Menten kinetics
-        # incorporates stimulation and inhibition
+        # incorporates stimulation and inhibition of however many inhibitors
         # need to include kinetic constant values for each stimulator/inhibitor
         # Assumption: each stimulator/inhibitor is independent!
-        # NOTE: currently, this class assumes allosteric inhibition 
+        # NOTE: this class assumes allosteric inhibition 
 
         super().__init__(forwardSpecie, backwardSpecie, Vmax_f=Vmax_f, Km_b=Km_b, Vmax_b=Vmax_b, Km_f=Km_f)
         

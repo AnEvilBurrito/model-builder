@@ -10,7 +10,7 @@ class Model:
         self.reactions = []
         self.modelName = modelName
 
-        self.activators = []
+        self.activators = {}
         self.specieFamily = {}
         
         # structure: "specieName": "initial concentration"
@@ -61,9 +61,19 @@ class Model:
         else:
             print('Duplicate reaction detected', reaction)
 
+    def addReaction_d(self, reaction_type, fs, bs):
+        pass
+
+    def addStimulator(self, stim):
+        pass 
+
+    def addInhibitor(self, inh):
+        pass 
+
     def addActivation(self, activator: str, conc: float, activationTime: float):
 
-        self.activators.append((activator, conc, activationTime))
+        self.activators[activator] = (activator, conc, activationTime)
+        self.species[activator] = 0
 
     def combine(self, otherModel, modelName = "None"):
 
