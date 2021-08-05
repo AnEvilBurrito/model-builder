@@ -3,7 +3,7 @@
 
 class Reactions:
 
-    def __init__(self, forwardSpecies, backwardSpecies):
+    def __init__(self, forwardSpecies, backwardSpecies, name=''):
 
         # forwardSpecies and backwardSpecies can be list or str
         # but are always initialised as list
@@ -20,6 +20,18 @@ class Reactions:
         self.paramNames = {}
 
         self.noBackward = False
+
+        # used to perform reaction look up in models
+        # should be unique
+        self.name = name
+
+    def setName(self, newName):
+
+        self.name = newName
+
+    def __str__(self) -> str:
+        
+        return 'name: ' + self.name + ' | forward specie(s): ' +  ' '.join(self.fs) + ' | backward specie(s): ' + ' '.join(self.bs) + ' | type: ' + type(self).__name__
 
     def __renameParams(self):
         

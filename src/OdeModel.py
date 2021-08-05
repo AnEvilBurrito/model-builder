@@ -32,8 +32,10 @@ class OdeModel(Model):
         stateVars = dict(zip(specieNames, P))
 
         # print(type(specieNames))
+        
+        reactions = list(self.reactions.values())
 
-        for re in self.reactions:
+        for re in reactions:
 
             for sp in re.fs:
 
@@ -73,7 +75,7 @@ class OdeModel(Model):
 
         activatorVals.sort(key=lambda x: x[2])
 
-        print(activatorVals)
+        # print(activatorVals)
 
         t = np.linspace(0, sim_time, sim_time/stepsize+1)
         remain_time = sim_time

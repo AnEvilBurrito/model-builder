@@ -4,7 +4,7 @@ import numpy as np
 
 class MichaelisMentenGeneral(MichaelisMenten):
 
-    def __init__(self, forwardSpecie: str, backwardSpecie: str, Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100, noBackward=False):
+    def __init__(self, forwardSpecie: str, backwardSpecie: str, name='', Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100, noBackward=False):
 
         # Generalised forward Michaelis Menten kinetics
         # incorporates stimulation and inhibition of however many inhibitors
@@ -12,7 +12,7 @@ class MichaelisMentenGeneral(MichaelisMenten):
         # Assumption: each stimulator/inhibitor is independent!
         # NOTE: this class assumes allosteric inhibition 
 
-        super().__init__(forwardSpecie, backwardSpecie, Vmax_f=Vmax_f, Km_b=Km_b, Vmax_b=Vmax_b, Km_f=Km_f)
+        super().__init__(forwardSpecie, backwardSpecie, name, Vmax_f=Vmax_f, Km_b=Km_b, Vmax_b=Vmax_b, Km_f=Km_f)
         
         self.type = "MG"
 

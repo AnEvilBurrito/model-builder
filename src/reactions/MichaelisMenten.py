@@ -2,9 +2,9 @@ from .Reactions import Reactions
 
 class MichaelisMenten(Reactions):
 
-    def __init__(self, forwardSpecie: str, backwardSpecie: str, Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100):
+    def __init__(self, forwardSpecie: str, backwardSpecie: str, name='', Vmax_f: float = 10, Km_b: float = 100, Vmax_b: float = 10, Km_f: float = 100):
 
-        super().__init__(forwardSpecie, backwardSpecie)
+        super().__init__(forwardSpecie, backwardSpecie, name)
     
         self.type = "MichaelisMenten"
         self.params = {

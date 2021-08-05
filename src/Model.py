@@ -1,13 +1,14 @@
 # a new model definition where it is essentially a wrapper
 # for a set of reactions
 
+from src.reactions.MichaelisMentenGeneral import MichaelisMentenGeneral
 from .reactions.Reactions import Reactions
 
 class Model: 
 
     def __init__(self, modelName = "unnamed_model"):
 
-        self.reactions = []
+        self.reactions = {}
         self.modelName = modelName
 
         self.activators = {}
@@ -15,6 +16,17 @@ class Model:
         
         # structure: "specieName": "initial concentration"
         self.species = {}
+
+        # automatic reaction naming
+        self.nameIterator = 0
+
+    def nameIter(self) -> str: 
+
+        # always begin from 1
+
+        self.nameIterator += 1 
+
+        return self.modelName + '_' + str(self.nameIterator)
 
     def setModelName(self, name):
 
@@ -25,9 +37,11 @@ class Model:
         # checks every reaction within the model
         # a O(N) update
 
+        reactions = list(self.reactions.values())
+
         i = 0 
-        while i < len(self.reactions):
-            re = self.reactions[i]
+        while i < len(reactions):
+            re = reactions[i]
             for fs in re.fs:
                 if fs not in self.species and fs != 'None' and fs != None:
                     self.species[fs] = 0
@@ -49,26 +63,53 @@ class Model:
 
     def addReaction(self, reaction: Reactions):
 
+        reactions = list(self.reactions.values())
         dup = False
-        for r in self.reactions:
+        for r in reactions:
             if r == reaction:
                 dup = True 
 
         if not dup:  
-            self.reactions.append(reaction)
+            reaction.setName(self.nameIter())
+            self.reactions[reaction.name] = reaction
             self.updateSpecies()
 
         else:
             print('Duplicate reaction detected', reaction)
 
+    def findReaction(self, fs=None, bs=None, type=None):
+
+        pass
+
     def addReaction_d(self, reaction_type, fs, bs):
         pass
 
-    def addStimulator(self, stim):
-        pass 
+    def addStimulator(self, reaction_name, stim, kc=0.1, backward=False):
+        
+        # NOTE: only reactions with .addStimulator() methods
+        # can use this method
 
-    def addInhibitor(self, inh):
-        pass 
+        re = self.reactions[reaction_name]
+        hasStim = getattr(re, "addStimulator", None)
+
+        if callable(hasStim):
+            re.addStimulator(stim, kc, backward)
+
+        else:
+            print('WARNING: Reaction specified has no addStimulator() method', reaction_name)
+            print(re)
+
+    def addInhibitor(self, reaction_name, inh, ki=0.1, backward=False):
+        
+        re = self.reactions[reaction_name]
+        has = getattr(re, "addInhibitor", None)
+
+        if callable(has):
+            re.addInhibitor(inh, ki, backward)
+
+        else:
+            print('WARNING: Reaction specified has no addInhibitor() method', reaction_name)
+            print(re)
 
     def addActivation(self, activator: str, conc: float, activationTime: float):
 
@@ -82,8 +123,8 @@ class Model:
 
         newModel = Model(modelName)
 
-        otherReactions = otherModel.reactions
-        reactions = self.reactions
+        otherReactions = otherModel.reactions.values()
+        reactions = self.reactions.values()
 
         for r in reactions:
             newModel.addReaction(r)
@@ -94,13 +135,24 @@ class Model:
         return newModel
 
     def __str__(self) -> str:
-        pass
+        
+        retStr = ''
+
+        reactions = list(self.reactions.values())
+
+        for r in reactions:
+            retStr += str(r)
+            retStr += '\n'
+        
+        return retStr
 
 
     def getParamSize(self) -> int:
         
+        reactions = list(self.reactions.values())
+
         size = 0
-        for re in self.reactions:
+        for re in reactions:
             size += re.getParamSize()
         
         return size
@@ -145,9 +197,11 @@ class Model:
 
         txtbc.write("********** MODEL PARAMETERS\n")
 
+        reactions = list(self.reactions.values())
+
         i = 0 
-        while i < len(self.reactions):
-            re = self.reactions[i]
+        while i < len(reactions):
+            re = reactions[i]
             id_ = i + 1
             re_params = re.paramNames
             names = re_params.keys()
@@ -200,8 +254,8 @@ class Model:
         txtbc.write("********** MODEL REACTIONS\n")
 
         i = 0 
-        while i < len(self.reactions):
-            re = self.reactions[i]
+        while i < len(reactions):
+            re = reactions[i]
             id_ = i + 1
 
             txtbc.write(re.getEqHeaderStr(id_))

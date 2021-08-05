@@ -6,11 +6,11 @@ class MassAction(Reactions):
     # Simplified Mass Action with only two forward specie and one backward specie,
     # with molecularities of 1
 
-    def __init__(self, forwardSpecie1: str, forwardSpecie2: str, backwardSpecie: str = '_Auto', Ka: float = 0.001, Kd: float = 0.01):
+    def __init__(self, forwardSpecie1: str, forwardSpecie2: str, backwardSpecie: str = '_Auto', name='', Ka: float = 0.001, Kd: float = 0.01):
 
         if backwardSpecie == '_Auto':
             backwardSpecie = forwardSpecie1 + 'u' + forwardSpecie2
-        super().__init__([forwardSpecie1, forwardSpecie2], backwardSpecie)
+        super().__init__([forwardSpecie1, forwardSpecie2], backwardSpecie, name)
         self.type = "MassAction"
 
         self.params = {
