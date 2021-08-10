@@ -116,21 +116,27 @@ class Model:
         self.activators[activator] = (activator, conc, activationTime)
         self.species[activator] = 0
 
-    def combine(self, otherModel, modelName = "None"):
+    def combine(self, otherModel, modelName = "UnnamedModel"):
 
         # combines model while avoiding duplicate reactions
-        # model combination is really just appending reactions and activations together
+        # model combination is really just appending reactions and activations and species together
 
         newModel = Model(modelName)
 
-        otherReactions = otherModel.reactions.values()
-        reactions = self.reactions.values()
+        otherReactions = list(otherModel.reactions.values())
+        reactions = list(self.reactions.values())
 
         for r in reactions:
             newModel.addReaction(r)
 
         for ro in otherReactions:
             newModel.addReaction(ro)
+
+        newModel.activators.update(self.activators)
+        newModel.activators.update(otherModel.activators)
+
+        newModel.species.update(self.species)
+        newModel.species.update(otherModel.species)
 
         return newModel
 

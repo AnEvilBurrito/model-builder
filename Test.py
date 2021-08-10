@@ -5,6 +5,7 @@ from src.Model import Model
 from src.reactions.MassAction import MassAction
 from src.reactions.MichaelisMentenGeneral import MichaelisMentenGeneral
 from src.reactions.MichaelisMenten import MichaelisMenten
+from src.reactions.Synthesis import Synthesis
 
 ### INTEGRATING TWO SEPARATE MODELS
 
@@ -67,8 +68,10 @@ test_ode = OdeModel('test')
 test_ode.addReaction(ma)
 test_ode.addReaction(mm)
 test_ode.addReaction(r)
+test_ode.addReaction(Synthesis('Erk'))
 
-test_ode.addStimulator('test_3', "pErk", kc=0.001)
+test_ode.addStimulator('test_3', "pErk", kc=10)
+test_ode.addInhibitor('test_4', 'B')
 
 print(test_ode)
 
@@ -76,7 +79,7 @@ print(test_ode)
 test_ode.addActivation('S', 8, 100)
 # # test_ode.addActivation('S2', 8, 10)
 
-initSpecies = ['Erk', 'A']
+initSpecies = ['Erk', 'A', 'Sos', 'Grb2']
 inits = [100] * len(initSpecies)
 
 test_ode.specieConc(initSpecies, inits)

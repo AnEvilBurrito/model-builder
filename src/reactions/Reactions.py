@@ -43,11 +43,11 @@ class Reactions:
 
     def computeForward(self, stateVars: dict):
         
-        return None
+        return 0
 
     def computeBackward(self, stateVars: dict):
 
-        return None
+        return 0
 
     # To generate txtbc
 

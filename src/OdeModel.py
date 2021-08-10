@@ -14,6 +14,31 @@ class OdeModel(Model):
         self.P = None 
         self.t = None
 
+    def combine(self, otherModel, modelName="UnnamedModel"):
+
+        # combines model while avoiding duplicate reactions
+        # model combination is really just appending reactions and activations and species together
+        # NOTE: this function is incomplete
+
+        newModel = OdeModel(modelName)
+
+        otherReactions = list(otherModel.reactions.values())
+        reactions = list(self.reactions.values())
+
+        for r in reactions:
+            newModel.addReaction(r)
+
+        for ro in otherReactions:
+            newModel.addReaction(ro)
+
+        newModel.activators.update(self.activators)
+        newModel.activators.update(otherModel.activators)
+
+        newModel.species.update(self.species)
+        newModel.species.update(otherModel.species)
+
+        return newModel
+
     def _diff(self, P, t):
 
         # Given a vector (python list) P and time t,
@@ -77,7 +102,7 @@ class OdeModel(Model):
 
         # print(activatorVals)
 
-        t = np.linspace(0, sim_time, sim_time/stepsize+1)
+        t = np.linspace(0, sim_time, int(sim_time/stepsize+1))
         remain_time = sim_time
 
         current_p = list(self.species.values())
@@ -90,7 +115,7 @@ class OdeModel(Model):
             act, conc, t_a = tuple_[0], tuple_[1], tuple_[2]
 
             if t_a < remain_time:
-                t_s = np.linspace(0, t_a, t_a/stepsize+1)
+                t_s = np.linspace(0, t_a, int(t_a/stepsize+1))
                 P = odeint(self._diff, current_p, t_s)
 
                 current_p = P[-1]
@@ -103,7 +128,7 @@ class OdeModel(Model):
             
             remain_time -= t_a
 
-        t_s = np.linspace(0, remain_time, remain_time/stepsize+1)
+        t_s = np.linspace(0, remain_time, int(remain_time/stepsize+1))
         P = odeint(self._diff, current_p, t_s)
 
         ret = np.concatenate((ret, P))

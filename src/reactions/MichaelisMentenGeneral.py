@@ -128,7 +128,7 @@ class MichaelisMentenGeneral(MichaelisMenten):
             kc_product.append(p)
 
         for ki_state in inh:
-            p = 1 + (stateVars[kc_state] / self.params[ki_str + ki_state])
+            p = 1 + (stateVars[ki_state] * self.params[ki_str + ki_state])
             ki_product.append(p)
 
         top = np.sum(kc_product) * s
@@ -196,7 +196,7 @@ class MichaelisMentenGeneral(MichaelisMenten):
         i = 0
         while i < len(inh):
             In = inh[i][0]
-            bot = bot + "(1 + {In} / {ki}) * ".format(In=In, ki=self.paramNames[ki_str + In])
+            bot = bot + "(1 + {In} * {ki}) * ".format(In=In, ki=self.paramNames[ki_str + In])
             i += 1
         bot = bot[:-3]             
 
