@@ -161,7 +161,7 @@ class OdeModel(Model):
         names = list(self.species.keys())
         i = 0
         while i < len(self.P):
-            if self.P[i] not in ignore_list:
+            if names[i] not in ignore_list:
                 plt.plot(self.t, self.P[i], label=names[i])
             i += 1
         plt.grid()
