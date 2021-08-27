@@ -32,6 +32,18 @@ class Model:
 
         self.modelName = name
 
+    def setParameter(self, parameterName, newValue):
+        
+        reactions = list(self.reactions.values())
+
+        for re in reactions:
+            for key, name in re.paramNames.items():
+                if name == parameterName:
+                    re.params[key] = newValue
+
+                    # debug msg
+                    print(re.params[key], newValue)
+        
     def updateSpecies(self):
 
         # checks every reaction within the model
