@@ -152,9 +152,10 @@ class OdeModel(Model):
         plt.legend()
         plt.show()
 
-    def plot(self, ignore_list=None):
+    def plot(self, ignore_list=None, only_print=None):
 
-        # ignore list should be a list
+        # ignore list and only_print should be a list
+        # TODO: only print function
 
         if ignore_list is None:
             ignore_list = []

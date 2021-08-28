@@ -123,6 +123,13 @@ class Model:
             print('WARNING: Reaction specified has no addInhibitor() method', reaction_name)
             print(re)
 
+    def removeStimulator(self, reaction_name, stim, backward=False):
+        pass 
+
+
+    def removeInhibitor(self, reaction_name, inh, backward=False):
+        pass
+
     def addActivation(self, activator: str, conc: float, activationTime: float):
 
         self.activators[activator] = (activator, conc, activationTime)

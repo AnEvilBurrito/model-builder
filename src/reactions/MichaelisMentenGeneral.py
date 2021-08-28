@@ -146,6 +146,9 @@ class MichaelisMentenGeneral(MichaelisMenten):
 
     def computeBackward(self, stateVars: dict):
 
+        if self.noBackward:
+            return 0
+
         if self.__vanilla(forward=False):
             return super().computeBackward(stateVars)
 
