@@ -2,52 +2,61 @@ from .Reactions import Reactions
 
 class Degradation(Reactions):
 
+    # Vanilla degradation law without stimulators and inhibitors
+
     def __init__(self, forwardSpecies, KDeg: float = 0.01):
-        super().__init__(forwardSpecies, "None")
+        super().__init__(forwardSpecies, [])
         self.KDeg = KDeg
         self.stimulators = []
 
-    def addStimulator(self, specie: str, alpha: float = 0.1):
+        self.params = {
+            'kdeg': KDeg
+        }
+
+        self.__renameParams()
+
+    def __renameParams(self):
         
-        self.stimulators.append((specie, alpha))
+        self.paramNames['kdeg'] = "kdeg_{f1}".format(f1=self.fs[0]) 
+
+    def computeForward(self, stateVars: dict):
+        return self.params['kdeg'] * stateVars[self.fs[0]]
+
+    def computeBackward(self, stateVars: dict):
+        return super().computeForward(stateVars)
+
+    # def addStimulator(self, specie: str, alpha: float = 0.1):
+        
+    #     self.stimulators.append((specie, alpha))
 
     def getEqHeaderStr(self, index):
         return "{forward} => :R{i}".format(forward=self.fs[0], i=index)
 
-    def getForwardEqStr(self, index):
-        retStr = "Kdeg{i} * {fs}".format(i=index, fs=self.fs[0])
+    def getForwardEqStr(self):
 
-        if len(self.stimulators) == 0:
-            return "Kdeg{i} * {fs}".format(i=index, fs=self.fs[0])
+        return "{kdeg} * {fs}".format(kdeg=self.paramNames['kdeg'], fs=self.fs[0])
 
-        addi = " * (1 + "
-        i = 0 
-        while i < len(self.stimulators):
-            st = self.stimulators[i]
-            specie = st[0]
-            addiEq = "(alpha{i}b{ai} * {st})".format(i=index, ai=str(i+1), st=specie)
-            addi = addi + addiEq
-            i += 1
-            if i != len(self.stimulators):
-                addi += " + "
-        addi += ")"
+        # retStr = "Kdeg{i} * {fs}".format(i=index, fs=self.fs[0])
 
-        return retStr + addi
+        # if len(self.stimulators) == 0:
+        # return "Kdeg{i} * {fs}".format(i=index, fs=self.fs[0])
 
-    def getBackwardEqStr(self, index):
-        return super().getBackwardEqStr(index)
+        # addi = " * (1 + "
+        # i = 0 
+        # while i < len(self.stimulators):
+        #     st = self.stimulators[i]
+        #     specie = st[0]
+        #     addiEq = "(alpha{i}b{ai} * {st})".format(i=index, ai=str(i+1), st=specie)
+        #     addi = addi + addiEq
+        #     i += 1
+        #     if i != len(self.stimulators):
+        #         addi += " + "
+        # addi += ")"
 
-    def getParams(self, index):
+        # return retStr + addi
 
-        all_params = {"Kdeg{i}".format(i=index): self.KDeg}
-
-        i = 0 
-        while i < len(self.stimulators):
-            k_str = "alpha{id}b{ai}".format(id=index, ai=str(i+1))
-            all_params[k_str] = self.stimulators[i][1]
-            i += 1
-
-        return all_params
+    def getBackwardEqStr(self):
+        return super().getBackwardEqStr()
 
 
 if __name__ == "__main__":

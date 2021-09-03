@@ -167,6 +167,8 @@ class OdeModel(Model):
             i += 1
         plt.grid()
         plt.legend()
+        plt.xlabel('Time (min)')
+        plt.ylabel('Specie level (unit)')
         plt.show()
 
 

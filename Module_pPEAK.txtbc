@@ -1,0 +1,53 @@
+********** MODEL NAME
+Module_pPEAK
+
+********** MODEL NOTES
+
+********** MODEL STATE INFORMATION
+% Initial Conditions
+
+pShc(0) = 100
+PTPN12(0) = 100
+pShcuPTPN12(0) = 0
+PEAK3d(0) = 100
+pPEAK3d(0) = 0
+
+********** MODEL PARAMETERS
+ka_pShc_PTPN12 = 0.001
+kd_pShcuPTPN12 = 0.01
+
+vm_PEAK3d_to_pPEAK3d = 10
+km_PEAK3d_to_pPEAK3d = 100
+vm_pPEAK3d_to_PEAK3d = 10
+km_pPEAK3d_to_PEAK3d = 100
+
+% Constants
+
+% Stimulation Concentration
+
+% Drug Concentration
+
+% Time Variables
+
+********** MODEL VARIABLES
+
+
+********** MODEL REACTIONS
+pShc + PTPN12 <=> pShcuPTPN12 :R1
+	vf = ka_pShc_PTPN12 * pShc * PTPN12
+	vr = kd_pShcuPTPN12 * pShcuPTPN12
+
+PEAK3d => pPEAK3d :R2
+	vf = vm_PEAK3d_to_pPEAK3d * PEAK3d / (km_PEAK3d_to_pPEAK3d + PEAK3d)
+
+********** MODEL FUNCTIONS
+
+
+********** MODEL EVENTS
+
+
+
+********** MODEL MATLAB FUNCTIONS
+
+
+
