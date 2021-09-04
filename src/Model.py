@@ -31,18 +31,6 @@ class Model:
     def setModelName(self, name):
 
         self.modelName = name
-
-    def setParameter(self, parameterName, newValue):
-        
-        reactions = list(self.reactions.values())
-
-        for re in reactions:
-            for key, name in re.paramNames.items():
-                if name == parameterName:
-                    re.params[key] = newValue
-
-                    # debug msg
-                    print(re.params[key], newValue)
         
     def updateSpecies(self):
 
@@ -182,6 +170,60 @@ class Model:
         
         return size
 
+    def setParam(self, reactionId, paramId: str, value: float):
+
+        # update one particular parameter in the model
+
+        re = self.reactions[reactionId]
+        re.params[paramId] = value
+
+    def setState(self, stateName, value):
+        
+        # update one state in the model
+
+        self.species[stateName] = value
+
+    def getParams(self):
+
+        retStr = ""
+
+        reactions = list(self.reactions.values())
+        
+        for re in reactions:
+            pn, pv = list(re.params.keys()), list(re.params.values())
+            i = 0 
+            while i < len(pn): 
+                retStr += "{name},{paramVals}".format(name=re.paramNames[pn[i]], paramVals=pv[i])
+                retStr += "\n"
+                # print(pn[i], pv[i])
+                i += 1
+
+        an, av = list(self.activators.keys()), list(self.activators.values())
+        i = 0 
+        while i < len(an):
+            # print(an[i], av[i])
+            retStr += "{name},{paramVals}".format(name=an[i], paramVals=av[i])
+            retStr += "\n"
+            i += 1
+
+        return retStr
+    
+
+    def getStates(self):
+
+        retStr = ""
+        
+        states, vals = list(self.species.keys()), list(self.species.values())
+
+        i = 0 
+        while i < len(states):
+            # print(states[i], vals[i])
+            retStr += "{n},{v}".format(n=states[i], v=vals[i])
+            retStr += "\n"
+            i += 1
+        
+        return retStr
+        
 
     def generateTxtbc(self):
         

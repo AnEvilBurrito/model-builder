@@ -152,10 +152,7 @@ class OdeModel(Model):
         plt.legend()
         plt.show()
 
-    def plot(self, ignore_list=None, only_print=None):
-
-        # ignore list and only_print should be a list
-        # TODO: only print function
+    def plot(self, ignore_list=None):
 
         if ignore_list is None:
             ignore_list = []
@@ -169,6 +166,31 @@ class OdeModel(Model):
         plt.legend()
         plt.xlabel('Time (min)')
         plt.ylabel('Specie level (unit)')
+        plt.title(self.modelName)
         plt.show()
+
+    def plotOnly(self, only_print=None):
+
+        if only_print is None:
+            only_print = []
+            
+        names = list(self.species.keys())
+        i = 0
+        while i < len(self.P):
+            if names[i] in only_print:
+                plt.plot(self.t, self.P[i], label=names[i])
+            i += 1
+        plt.grid()
+        plt.legend()
+        plt.xlabel('Time (min)')
+        plt.ylabel('Specie level (unit)')
+        plt.title(self.modelName)
+        plt.show()
+
+    def extractStateValues(self, stateName):
+        
+        specieNames = list(self.species.keys())
+        idx = specieNames.index(stateName)
+        return self.P[idx]
 
 
