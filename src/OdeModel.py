@@ -152,39 +152,50 @@ class OdeModel(Model):
         plt.legend()
         plt.show()
 
-    def plot(self, ignore_list=None):
+    def plot(self, ignore_list=None, colours=None):
 
         if ignore_list is None:
             ignore_list = []
         names = list(self.species.keys())
+        ci = 0 
         i = 0
         while i < len(self.P):
             if names[i] not in ignore_list:
-                plt.plot(self.t, self.P[i], label=names[i])
+                if colours:
+                    plt.plot(self.t, self.P[i], label=names[i], c=colours[ci])
+                    ci += 1
+                else:
+                    plt.plot(self.t, self.P[i], label=names[i])
             i += 1
         plt.grid()
         plt.legend()
         plt.xlabel('Time (min)')
-        plt.ylabel('Specie level (unit)')
+        plt.ylabel('Specie level (arb. unit)')
         plt.title(self.modelName)
         plt.show()
 
-    def plotOnly(self, only_print=None):
+    def plotOnly(self, only_print=None, colours=None):
 
         if only_print is None:
             only_print = []
             
         names = list(self.species.keys())
+        ci = 0
         i = 0
         while i < len(self.P):
             if names[i] in only_print:
-                plt.plot(self.t, self.P[i], label=names[i])
+                if colours:
+                    plt.plot(self.t, self.P[i], label=names[i], c=colours[ci])
+                    ci += 1
+                else:
+                    plt.plot(self.t, self.P[i], label=names[i])
             i += 1
         plt.grid()
         plt.legend()
         plt.xlabel('Time (min)')
         plt.ylabel('Specie level (unit)')
         plt.title(self.modelName)
+        plt.set_cmap('BuPu')
         plt.show()
 
     def extractStateValues(self, stateName):
