@@ -5,6 +5,10 @@ from src.Model import Model
 from scipy.integrate import odeint
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+# mpl.rcParams['figure.dpi'] = 300
+# mpl.rc('savefig', dpi=300)
 
 class OdeModel(Model):
 
@@ -152,7 +156,7 @@ class OdeModel(Model):
         plt.legend()
         plt.show()
 
-    def plot(self, ignore_list=None, colours=None):
+    def plot(self, ignore_list=None, colours=None, savefig=False, name='none'):
 
         if ignore_list is None:
             ignore_list = []
@@ -172,9 +176,15 @@ class OdeModel(Model):
         plt.xlabel('Time (min)')
         plt.ylabel('Specie level (arb. unit)')
         plt.title(self.modelName)
+
+        if savefig:
+            plt.savefig(name, dpi=100)
+
         plt.show()
 
-    def plotOnly(self, only_print=None, colours=None):
+
+
+    def plotOnly(self, only_print=None, colours=None, savefig=False, name='none'):
 
         if only_print is None:
             only_print = []
@@ -195,8 +205,10 @@ class OdeModel(Model):
         plt.xlabel('Time (min)')
         plt.ylabel('Specie level (unit)')
         plt.title(self.modelName)
-        plt.set_cmap('BuPu')
+        if savefig:
+            plt.savefig(name, dpi=100)
         plt.show()
+
 
     def extractStateValues(self, stateName):
         
